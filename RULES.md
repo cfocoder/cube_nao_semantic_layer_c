@@ -12,7 +12,7 @@ This project tests Cube Core as a semantic layer without business-policy context
 6. If Cube cannot provide a requested definition or result, say so instead of guessing.
 7. Report the semantic route and relevant filters/time grain in the answer.
 8. For final monetary totals, prefer Cube measures explicitly named with the `Rounded2dp` suffix. They round the aggregate after `SUM`; never round source rows before aggregation. Keep the full-precision measure for ranking, thresholds, and other calculations that depend on exact values. This rule applies only to monetary totals, not counts, quantities, rates, or percentages; do not combine currencies or perform currency conversion unless requested and supported by the model.
-9. When asked to produce long lists of results, show the results in one monospace plain-text code block. If the complete list won't fit in a single response, provide it as a downloadable text file instead of leaving entries out
+9. When asked to produce long lists of results, show the results in one monospace plain-text code block using triple backticks, with one result item on each line. If the complete list won't fit in a single response, provide it as a downloadable text file intsead of leaving entries out
 
 ## First-turn response requirement
 Always answer the user's question in the current response and provide every requested field; if data is unavailable, state that explicitly without inventing values or deferring the answer to a follow-up.
