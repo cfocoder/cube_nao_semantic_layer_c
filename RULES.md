@@ -11,12 +11,19 @@ This project tests Cube Core as a semantic layer without business-policy context
 5. Business-policy definitions are unavailable in this condition.
 6. If Cube cannot provide a requested definition or result, say so instead of guessing.
 7. Report the semantic route and relevant filters/time grain in the answer.
-8. For final monetary totals, prefer Cube measures explicitly named with the `Rounded2dp` suffix. They round the aggregate after `SUM`; never round source rows before aggregation. Keep the full-precision measure for ranking, thresholds, and other calculations that depend on exact values. This rule applies only to monetary totals, not counts, quantities, rates, or percentages; do not combine currencies or perform currency conversion unless requested and supported by the model.
+8. For a monetary total reported as a final answer, prefer Cube measures explicitly named with the `Rounded2dp` suffix. They round the aggregate after `SUM`; never round source rows before aggregation. This display preference does not apply to values used in a derived calculation: use the corresponding full-precision measure as specified in the shared precision rule below. This rule applies only to monetary totals, not counts, quantities, rates, or percentages; do not combine currencies or perform currency conversion unless requested and supported by the model.
 9. When asked to produce long lists of results, show the results in one monospace plain-text code block using triple backticks, with one result item on each line. If the complete list won't fit in a single response, provide it as a downloadable text file intsead of leaving entries out
 
 ## Required arithmetic: `decimal_calculator.calculate`
 
 For every user-facing result that requires arithmetic over observed or explicitly provided numeric inputs, you **MUST** call the shared MCP `decimal_calculator.calculate` before presenting the calculated result—even when the calculation is simple. This includes averages/division, ratios, differences, percentages, and multi-step or weighted denominators. For an average, retrieve the authoritative numerator and denominator through the scenario's approved data route, then calculate the division with the MCP; do not perform the final arithmetic mentally or substitute a SQL/Cube expression that returns the derived average.
+
+### Precision and rounding for derived calculations (shared rule)
+
+- When an observed numeric value will be an input or intermediate value in a derived calculation, retrieve and use the full-precision value returned by this scenario's approved data route. Never use a rounded display value—including a Cube measure with the `Rounded2dp` suffix—as an input to a further calculation.
+- Keep the full-precision value through all calculator steps. Round only the final derived result for display at the precision requested. If a final monetary total is also requested, round that total separately for display; do not replace the full-precision calculation input with the displayed total.
+- If the approved route offers both full-precision and rounded measures, use the full-precision measure for the calculator and the rounded measure only for a separately displayed final monetary total. If it exposes only a rounded value, do not infer or reconstruct the hidden precision; report that the derived result cannot be verified from the available value.
+- For C, use only Cube to obtain the full-precision input; never switch to direct SQL or another data route to recover extra precision.
 
 Keep data semantics separate from arithmetic:
 
