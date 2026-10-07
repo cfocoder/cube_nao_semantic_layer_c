@@ -5,8 +5,8 @@ This repository is the Nao Multi-project context for formal scenario **C**.
 ## Boundary
 
 - No native PostgreSQL database is declared.
-- Cube Core is accessed only through the `cube_semantic` MCP.
-- Available MCP tools are `cube_metadata` and `cube_query`.
+- Analytic data is accessed only through the `cube_semantic` MCP; `decimal_calculator` has no data access.
+- Cube tools are `cube_metadata` and `cube_query`; the shared `decimal_calculator.calculate` tool is only for exact arithmetic over retrieved values.
 - The agent uses the measures, dimensions, filters, and time grains exposed by Cube.
 - No Contoso business skill or domain-specific business-policy documentation is available.
 - `direct_postgres` must not be present or usable in this project.
